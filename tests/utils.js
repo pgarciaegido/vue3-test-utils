@@ -1,0 +1,1 @@
+export const setDatTestAttr = (value) => `[data-test="${value}"]`;
