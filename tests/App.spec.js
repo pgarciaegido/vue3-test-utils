@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils';
+import flushPromises from 'flush-promises';
 import App from '../src/App.vue';
 
 describe('App', () => {
@@ -7,5 +8,12 @@ describe('App', () => {
         const title = wrapper.get('h1');
 
         expect(title.text()).toBe('Users list');
+    });
+
+    test('should render users fetched from service', async () => {
+        const wrapper = mount(App);
+        await flushPromises();
+        const users = wrapper.findAllComponents('[data-test="user-item"]');
+        expect(users.length).toBe(4);
     });
 });

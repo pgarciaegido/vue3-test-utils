@@ -1,7 +1,7 @@
 <template>
   <h1>Users list</h1>
   <div class="users-list__wrapper">
-    <user v-for="(user, i) in users" :key="i" :user="user" class="user-item" />
+    <user v-for="(user, i) in users" :key="i" :user="user" class="user-item" data-test="user-item" />
   </div>
 </template>
 
@@ -13,7 +13,7 @@ import { getUsers } from './utils/api';
 export default {
   name: 'App',
   components: {
-    user,   
+    user,
   },
   setup() {
     const users = ref([]);
