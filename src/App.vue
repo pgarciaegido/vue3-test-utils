@@ -1,7 +1,13 @@
 <template>
   <h1>Users list</h1>
   <div class="users-list__wrapper">
-    <user v-for="(user, i) in users" :key="i" :user="user" class="user-item" data-test="user-item" />
+    <user 
+      v-for="(user, i) in users"
+      :key="i"
+      :user="user"
+      class="user-item"
+      data-test="user-item"
+      @like="likeUser" />
   </div>
 </template>
 
@@ -23,8 +29,14 @@ export default {
       users.value = res;
     });
 
+    const likeUser = (userId) => users.value = users.value
+      .map((user) => user.id === userId
+        ? { ...user, liked: true } 
+        : user);
+
     return {
       users,
+      likeUser,
     }
   }
 }
