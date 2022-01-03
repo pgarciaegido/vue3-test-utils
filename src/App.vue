@@ -29,10 +29,11 @@ export default {
       users.value = res;
     });
 
-    const likeUser = (userId) => users.value = users.value
-      .map((user) => user.id === userId
+    const likeUser = (userId) => {
+      users.value = users.value.map((user) => user.id === userId
         ? { ...user, liked: true } 
         : user);
+    }
 
     return {
       users,

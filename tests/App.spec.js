@@ -16,4 +16,14 @@ describe('App', () => {
         const users = wrapper.findAllComponents('[data-test="user-item"]');
         expect(users.length).toBe(4);
     });
+
+    test('should modify users when user emits `like` event', async () => {
+        const firstUserId = 1;
+        const wrapper = shallowMount(App);
+        await flushPromises();
+        const firstUser = wrapper.findComponent('user-stub');
+        expect(wrapper.vm.users[0].liked).toBe(false);
+        firstUser.vm.$emit('like', firstUserId);
+        expect(wrapper.vm.users[0].liked).toBe(true);
+    });
 });
