@@ -2,6 +2,27 @@ import { shallowMount } from '@vue/test-utils';
 import flushPromises from 'flush-promises';
 import App from '../src/App.vue';
 
+const mockGetUsers = [
+    {
+        id: 1,
+        name: 'Miguel',
+        city: 'Madrid',
+        liked: false,
+    },
+    {
+        id: 2,
+        name: 'Paula',
+        city: 'Barcelona',
+        liked: false,
+    },
+]
+
+jest.mock('../src/utils/api', () => {
+    return {
+        getUsers: jest.fn(() => Promise.resolve(mockGetUsers)),
+    }
+});
+
 describe('App', () => {
     test('should render the title correctly', () => {
         const wrapper = shallowMount(App);
@@ -14,7 +35,7 @@ describe('App', () => {
         const wrapper = shallowMount(App);
         await flushPromises();
         const users = wrapper.findAllComponents('[data-test="user-item"]');
-        expect(users.length).toBe(4);
+        expect(users.length).toBe(mockGetUsers.length);
     });
 
     test('should modify users when user emits `like` event', async () => {

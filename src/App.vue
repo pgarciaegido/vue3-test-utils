@@ -14,7 +14,7 @@
 <script>
 import { onMounted, ref } from 'vue';
 import user from './components/User.vue';
-import { getUsers } from './utils/api';
+import api from './utils/api';
 
 export default {
   name: 'App',
@@ -25,7 +25,7 @@ export default {
     const users = ref([]);
 
     onMounted(async() => {
-      const res = await getUsers();
+      const res = await api.getUsers();
       users.value = res;
     });
 
