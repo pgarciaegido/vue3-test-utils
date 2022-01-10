@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import flushPromises from 'flush-promises';
 import App from '../src/App.vue';
+import api from '../src/utils/api';
 
 const mockGetUsers = [
     {
@@ -23,12 +24,35 @@ jest.mock('../src/utils/api', () => {
     }
 });
 
+afterEach(() => {
+    jest.clearAllMocks();
+});
+
 describe('App', () => {
     test('should render the title correctly', () => {
         const wrapper = shallowMount(App);
         const title = wrapper.get('h1');
 
         expect(title.text()).toBe('Users list');
+    });
+
+    test('should call getUser method right after the component loads', () => {
+        expect(api.getUsers).not.toHaveBeenCalled();
+        shallowMount(App);
+        expect(api.getUsers).toHaveBeenCalled();
+    });
+
+    test('should not render api error paragraph if api resolves correctly', async () => {
+        const wrapper = shallowMount(App);
+        await flushPromises();
+        expect(wrapper.find('[data-test="api-error-message"]').exists()).toBe(false);
+    });
+
+    test('should render api error paragraph if api fails', async () => {
+        api.getUsers.mockRejectedValueOnce({});
+        const wrapper = shallowMount(App);
+        await flushPromises();
+        expect(wrapper.find('[data-test="api-error-message"]').exists()).toBe(true);
     });
 
     test('should render users fetched from service', async () => {

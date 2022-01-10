@@ -8,6 +8,11 @@
       class="user-item"
       data-test="user-item"
       @like="likeUser" />
+    <p
+      v-if="showApiError"
+      class="users-list__error-paragraph"
+      data-test="api-error-message"
+    >Ha habido un error</p>
   </div>
 </template>
 
@@ -23,10 +28,15 @@ export default {
   },
   setup() {
     const users = ref([]);
+    const showApiError = ref(false);
 
     onMounted(async() => {
-      const res = await api.getUsers();
-      users.value = res;
+      try {
+        const res = await api.getUsers();
+        users.value = res;
+      } catch(e) {
+        showApiError.value = true;
+      }
     });
 
     const likeUser = (userId) => {
@@ -38,6 +48,7 @@ export default {
     return {
       users,
       likeUser,
+      showApiError,
     }
   }
 }
