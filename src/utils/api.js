@@ -26,5 +26,8 @@ export default {
                 liked: false,
             },
         ]));
+    },
+    saveUser() {
+        return Promise.resolve('Ok');
     }
 };
