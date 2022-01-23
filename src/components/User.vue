@@ -1,5 +1,5 @@
 <template>
-    <div class="user">
+    <div class="user" @click="edit">
         <p class="name" data-test="name">{{user.name}}</p>
         <p class="city" data-test="city">{{user.city}}</p>
 
@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router';
+
 export default {
     props: {
         user: {
@@ -22,10 +24,15 @@ export default {
         },
     },
     setup(props, { emit }) {
+        const router = useRouter();
+
         const likeUser = () => emit('like', props.user.id);
 
+        const edit = () => router.push({ path: '/create', query: { name: props.user.name, city: props.user.city }});
+
         return {
-            likeUser
+            likeUser,
+            edit,
         }
     }
 }

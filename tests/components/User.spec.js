@@ -45,4 +45,8 @@ describe('User', () => {
         likedSpan.trigger('click');
         expect(wrapper.emitted('like')[0][0]).toBe(defaultProps.user.id);
     });
+
+    test('should push to createUser route when clicking on user', () => {
+
+    });
 });

@@ -7,11 +7,13 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
+import { useRoute } from 'vue-router';
 import api from '../utils/api';
 
 export default {
     setup() {
+        const route = useRoute()
         const form = reactive({
             name: '',
             city: '',
@@ -20,6 +22,13 @@ export default {
         const save = () => api.saveUser(form);
 
         const disableButton = computed(() => !form.name || !form.city);
+
+        onMounted(() => {
+            if (route.query.name && route.query.city) {
+                form.name = route.query.name;
+                form.city = route.query.city;
+            }
+        });
 
         return {
             form,
