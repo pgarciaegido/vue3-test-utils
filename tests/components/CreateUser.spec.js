@@ -1,4 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
+import { nextTick } from 'vue';
+import { getRouter } from 'vue-router-mock';
 import CreateUser from '../../src/components/CreateUser.vue';
 import api from '../../src/utils/api';
 
@@ -45,5 +47,21 @@ describe('User', () => {
             name: 'pablo',
             city: 'Madrid',
         });
+    });
+
+    test('should fill inputs with user info from query params', async () => {
+        const router = getRouter()
+        const name = 'Manuel';
+        const city = 'Caracas';
+
+        await router.push(`/create?name=${name}&city=${city}`);
+        const wrapper = shallowMount(CreateUser);
+        const inputName = wrapper.get('[data-test="name"]');
+        const inputCity = wrapper.get('[data-test="city"]');
+
+        await nextTick();
+
+        expect(inputName.element.value).toBe(name);
+        expect(inputCity.element.value).toBe(city);
     });
 });

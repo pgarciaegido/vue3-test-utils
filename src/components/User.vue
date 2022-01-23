@@ -3,7 +3,7 @@
         <p class="name" data-test="name">{{user.name}}</p>
         <p class="city" data-test="city">{{user.city}}</p>
 
-        <span v-if="!user.liked" class="like" @click="likeUser" data-test="like">Like!</span>
+        <span v-if="!user.liked" class="like" @click.stop="likeUser" data-test="like">Like!</span>
         <span v-else class="liked" data-test="liked">Liked!</span>
     </div>
 </template>

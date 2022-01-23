@@ -47,6 +47,18 @@ describe('User', () => {
     });
 
     test('should push to createUser route when clicking on user', () => {
+        const wrapper = shallowMount(User, {
+            props: defaultProps,
+        });
 
+        expect(wrapper.router.push).not.toHaveBeenCalled();
+        wrapper.trigger('click');
+        expect(wrapper.router.push).toHaveBeenCalledWith({
+            path: '/create',
+            query: {
+                city: defaultProps.user.city,
+                name: defaultProps.user.name,
+            }
+        });
     });
 });
