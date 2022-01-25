@@ -1,15 +1,16 @@
 <template>
   <h1>Users list</h1>
   <div class="users-list__wrapper">
-    <user 
-      v-for="(user, i) in users"
+    <user
+      v-for="(user, i) in store.users"
       :key="i"
       :user="user"
       class="user-item"
       data-test="user-item"
-      @like="likeUser" />
+      @like="store.likeUser"
+    />
     <p
-      v-if="showApiError"
+      v-if="store.showApiError"
       class="users-list__error-paragraph"
       data-test="api-error-message"
     >Ha habido un error</p>
@@ -17,9 +18,9 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import user from './User.vue';
-import api from '../utils/api';
+import { useStore } from '../store';
 
 export default {
   name: 'App',
@@ -27,28 +28,12 @@ export default {
     user,
   },
   setup() {
-    const users = ref([]);
-    const showApiError = ref(false);
+    const store = useStore();
 
-    onMounted(async() => {
-      try {
-        const res = await api.getUsers();
-        users.value = res;
-      } catch(e) {
-        showApiError.value = true;
-      }
-    });
-
-    const likeUser = (userId) => {
-      users.value = users.value.map((user) => user.id === userId
-        ? { ...user, liked: true } 
-        : user);
-    }
+    onMounted(async () => store.getUsers());
 
     return {
-      users,
-      likeUser,
-      showApiError,
+      store,
     }
   }
 }
