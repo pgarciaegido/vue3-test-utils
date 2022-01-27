@@ -48,7 +48,7 @@ describe('User', () => {
         expect(wrapper.find('[data-test="liked"]').exists()).toBe(true);
     });
 
-    test('should emit `like` event with user id when like span is clicked', async () => {
+    test('should like user when like span is clicked', async () => {
         const id = 1;
         const wrapper = shallowMount(User, {
             props: {
