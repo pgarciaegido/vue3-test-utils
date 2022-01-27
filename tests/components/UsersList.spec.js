@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import flushPromises from 'flush-promises';
+import { createTestingPinia } from '@pinia/testing'
 import UsersList from '../../src/components/UsersList.vue';
 import api from '../../src/utils/api';
 
@@ -30,7 +31,13 @@ afterEach(() => {
 
 describe('UsersList', () => {
     test('should render the title correctly', () => {
-        const wrapper = shallowMount(UsersList);
+        const wrapper = shallowMount(UsersList, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         const title = wrapper.get('h1');
 
         expect(title.text()).toBe('Users list');
@@ -38,25 +45,49 @@ describe('UsersList', () => {
 
     test('should call getUser method right after the component loads', () => {
         expect(api.getUsers).not.toHaveBeenCalled();
-        shallowMount(UsersList);
+        shallowMount(UsersList, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         expect(api.getUsers).toHaveBeenCalled();
     });
 
     test('should not render api error paragraph if api resolves correctly', async () => {
-        const wrapper = shallowMount(UsersList);
+        const wrapper = shallowMount(UsersList, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         await flushPromises();
         expect(wrapper.find('[data-test="api-error-message"]').exists()).toBe(false);
     });
 
     test('should render api error paragraph if api fails', async () => {
         api.getUsers.mockRejectedValueOnce({});
-        const wrapper = shallowMount(UsersList);
+        const wrapper = shallowMount(UsersList, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         await flushPromises();
         expect(wrapper.find('[data-test="api-error-message"]').exists()).toBe(true);
     });
 
     test('should render users fetched from service', async () => {
-        const wrapper = shallowMount(UsersList);
+        const wrapper = shallowMount(UsersList, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         await flushPromises();
         const users = wrapper.findAllComponents('[data-test="user-item"]');
         expect(users.length).toBe(mockGetUsers.length);
@@ -64,11 +95,17 @@ describe('UsersList', () => {
 
     test('should modify users when user emits `like` event', async () => {
         const firstUserId = 1;
-        const wrapper = shallowMount(UsersList);
+        const wrapper = shallowMount(UsersList, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         await flushPromises();
         const firstUser = wrapper.findComponent('user-stub');
-        expect(wrapper.vm.users[0].liked).toBe(false);
+        expect(wrapper.vm.store.users[0].liked).toBe(false);
         firstUser.vm.$emit('like', firstUserId);
-        expect(wrapper.vm.users[0].liked).toBe(true);
+        expect(wrapper.vm.store.users[0].liked).toBe(true);
     });
 });

@@ -25,7 +25,6 @@ export default {
         });
 
         return {
-            save,
             disableButton,
             store,
         };

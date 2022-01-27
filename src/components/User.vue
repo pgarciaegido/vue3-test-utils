@@ -3,7 +3,12 @@
         <p class="name" data-test="name">{{ user.name }}</p>
         <p class="city" data-test="city">{{ user.city }}</p>
 
-        <span v-if="!user.liked" class="like" @click.stop="store.likeUser" data-test="like">Like!</span>
+        <span
+            v-if="!user.liked"
+            class="like"
+            @click.stop="store.likeUser(user.id)"
+            data-test="like"
+        >Like!</span>
         <span v-else class="liked" data-test="liked">Liked!</span>
     </div>
 </template>
@@ -24,7 +29,7 @@ export default {
             submit: (userId) => !!userId
         },
     },
-    setup(props, { emit }) {
+    setup(props) {
         const router = useRouter();
 
         const store = useStore();

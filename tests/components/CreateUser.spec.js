@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import { getRouter } from 'vue-router-mock';
+import { createTestingPinia } from '@pinia/testing'
 import CreateUser from '../../src/components/CreateUser.vue';
 import api from '../../src/utils/api';
 
@@ -16,7 +17,13 @@ afterEach(() => {
 
 describe('User', () => {
     test('should disable save button when either name or city are empty', async () => {
-        const wrapper = shallowMount(CreateUser);
+        const wrapper = shallowMount(CreateUser, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         const nameInput = wrapper.get('[data-test="name"]');
         const cityInput = wrapper.get('[data-test="city"]');
         const saveButton = wrapper.get('[data-test="save"]');
@@ -34,7 +41,13 @@ describe('User', () => {
     });
 
     test('should call saveUser endpoint with correct values', async () => {
-        const wrapper = shallowMount(CreateUser);
+        const wrapper = shallowMount(CreateUser, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         const nameInput = wrapper.get('[data-test="name"]');
         const cityInput = wrapper.get('[data-test="city"]');
         const saveButton = wrapper.get('[data-test="save"]');
@@ -55,7 +68,13 @@ describe('User', () => {
         const city = 'Caracas';
 
         await router.push(`/create?name=${name}&city=${city}`);
-        const wrapper = shallowMount(CreateUser);
+        const wrapper = shallowMount(CreateUser, {
+            global: {
+                plugins: [createTestingPinia({
+                    stubActions: false,
+                })],
+            },
+        });
         const inputName = wrapper.get('[data-test="name"]');
         const inputCity = wrapper.get('[data-test="city"]');
 
