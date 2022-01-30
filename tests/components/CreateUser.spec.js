@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
 import { nextTick } from 'vue';
 import { getRouter } from 'vue-router-mock';
-import { createTestingPinia } from '@pinia/testing'
 import CreateUser from '../../src/components/CreateUser.vue';
+import { getMountConfig, getDataTestAttr } from '../utils';
 import api from '../../src/utils/api';
 
 jest.mock('../../src/utils/api', () => {
@@ -15,18 +15,22 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
+const getFormElements = (w) => {
+    const nameInput = w.get(getDataTestAttr('name'))
+    const cityInput = w.get(getDataTestAttr('city'));
+    const saveButton = w.get(getDataTestAttr('save'));
+
+    return {
+        nameInput,
+        cityInput,
+        saveButton,
+    }
+};
+
 describe('User', () => {
     test('should disable save button when either name or city are empty', async () => {
-        const wrapper = shallowMount(CreateUser, {
-            global: {
-                plugins: [createTestingPinia({
-                    stubActions: false,
-                })],
-            },
-        });
-        const nameInput = wrapper.get('[data-test="name"]');
-        const cityInput = wrapper.get('[data-test="city"]');
-        const saveButton = wrapper.get('[data-test="save"]');
+        const wrapper = shallowMount(CreateUser, getMountConfig());
+        const { nameInput, cityInput, saveButton } = getFormElements(wrapper);
 
         saveButton.trigger('click');
         expect(api.saveUser).not.toHaveBeenCalled();
@@ -41,16 +45,8 @@ describe('User', () => {
     });
 
     test('should call saveUser endpoint with correct values', async () => {
-        const wrapper = shallowMount(CreateUser, {
-            global: {
-                plugins: [createTestingPinia({
-                    stubActions: false,
-                })],
-            },
-        });
-        const nameInput = wrapper.get('[data-test="name"]');
-        const cityInput = wrapper.get('[data-test="city"]');
-        const saveButton = wrapper.get('[data-test="save"]');
+        const wrapper = shallowMount(CreateUser, getMountConfig());
+        const { nameInput, cityInput, saveButton } = getFormElements(wrapper);
 
         await nameInput.setValue('pablo');
         await cityInput.setValue('Madrid');
@@ -68,19 +64,12 @@ describe('User', () => {
         const city = 'Caracas';
 
         await router.push(`/create?name=${name}&city=${city}`);
-        const wrapper = shallowMount(CreateUser, {
-            global: {
-                plugins: [createTestingPinia({
-                    stubActions: false,
-                })],
-            },
-        });
-        const inputName = wrapper.get('[data-test="name"]');
-        const inputCity = wrapper.get('[data-test="city"]');
+        const wrapper = shallowMount(CreateUser, getMountConfig());
+        const { nameInput, cityInput } = getFormElements(wrapper);
 
         await nextTick();
 
-        expect(inputName.element.value).toBe(name);
-        expect(inputCity.element.value).toBe(city);
+        expect(nameInput.element.value).toBe(name);
+        expect(cityInput.element.value).toBe(city);
     });
 });
