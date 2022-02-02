@@ -6,7 +6,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "cypress:open": "cypress open",
+    "test:e2e": "cypress run"
   },
   "dependencies": {
     "pinia": "^2.0.9",
@@ -20,6 +22,7 @@
     "@vitejs/plugin-vue": "^2.0.0",
     "@vue/test-utils": "^2.0.0-rc.18",
     "babel-jest": "^27.4.6",
+    "cypress": "^9.4.1",
     "flush-promises": "^1.0.2",
     "full-icu": "^1.4.0",
     "jest": "^27.4.7",

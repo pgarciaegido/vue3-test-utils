@@ -1,5 +1,13 @@
-import { defineStore } from 'pinia'
+import { markRaw } from 'vue';
+import { defineStore, createPinia } from 'pinia'
 import api from './utils/api';
+import router from './router';
+
+const pinia = createPinia();
+
+pinia.use(({ store }) => {
+    store.router = markRaw(router)
+});
 
 export const useStore = defineStore('main', {
     state: () => ({
@@ -24,8 +32,9 @@ export const useStore = defineStore('main', {
                 ? { ...user, liked: true }
                 : user);
         },
-        save() {
-            return api.saveUser(this.form);
+        async save() {
+            await api.saveUser(this.form);
+            router.push('/');
         },
     }
 })

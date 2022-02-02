@@ -1,6 +1,6 @@
 <template>
   <h1>Users list</h1>
-  <div class="users-list__wrapper">
+  <div data-test="users-list" class="users-list__wrapper">
     <user
       v-for="(user, i) in store.users"
       :key="i"
