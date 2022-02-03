@@ -17,12 +17,12 @@
   </div>
 </template>
 
-<script>
-import { onMounted } from 'vue';
+<script lang="ts">
+import { defineComponent, onMounted } from 'vue';
 import user from './User.vue';
 import { useStore } from '../store';
 
-export default {
+export default defineComponent({
   name: 'App',
   components: {
     user,
@@ -36,7 +36,7 @@ export default {
       store,
     }
   }
-}
+});
 </script>
 
 <style>

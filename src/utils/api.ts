@@ -1,5 +1,7 @@
+import { User } from '../types/User';
+
 export default {
-    getUsers() {
+    getUsers(): Promise<User[]> {
         return new Promise(res => setTimeout(res, 0, [
             {
                 id: 1,
@@ -27,7 +29,8 @@ export default {
             },
         ]));
     },
-    saveUser() {
+    saveUser(form: User): Promise<String> {
+        console.log(form);
         return Promise.resolve('Ok');
     }
 };

@@ -6,12 +6,12 @@
     </div>
 </template>
 
-<script>
-import { computed, onMounted } from 'vue';
+<script lang="ts">
+import { computed, defineComponent, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStore } from '../store';
 
-export default {
+export default defineComponent({
     setup() {
         const route = useRoute()
         const store = useStore()
@@ -19,8 +19,12 @@ export default {
 
         onMounted(() => {
             if (route.query.name && route.query.city) {
-                store.form.name = route.query.name;
-                store.form.city = route.query.city;
+                store.$patch({
+                    form: {
+                        name: route.query.name,
+                        city: route.query.city,
+                    }
+                })
             }
         });
 
@@ -29,5 +33,5 @@ export default {
             store,
         };
     }
-}
+});
 </script>
