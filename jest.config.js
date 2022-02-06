@@ -3,7 +3,8 @@ module.exports = {
     testEnvironment: 'jsdom',
     transform: {
         "^.+\\.vue$": "vue3-jest",
-        "^.+\\js$": "babel-jest"
+        "^.+\\js$": "babel-jest",
+        "^.+\\.tsx?$": "ts-jest",
     },
     moduleFileExtensions: ['vue', 'js', 'json', 'jsx', 'ts', 'tsx', 'node'],
     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
@@ -16,4 +17,5 @@ module.exports = {
             statements: 90
         }
     },
+    testPathIgnorePatterns: ["<rootDir>/cypress"]
 };

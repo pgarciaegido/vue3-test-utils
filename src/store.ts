@@ -10,10 +10,15 @@ pinia.use(({ store }) => {
     store.router = markRaw(router)
 });
 
-interface IState {
+interface GetUsersFunc {
+    (): User[]
+}
+
+export interface IState {
     form: User,
     users: User[],
-    showApiError: Boolean
+    showApiError: Boolean,
+    getUsers?: GetUsersFunc,
 }
 
 

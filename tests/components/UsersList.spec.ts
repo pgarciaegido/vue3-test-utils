@@ -1,4 +1,5 @@
-import { shallowMount } from '@vue/test-utils';
+import { VueElement } from 'vue';
+import { shallowMount, VueWrapper } from '@vue/test-utils';
 import flushPromises from 'flush-promises';
 import { getMountConfig, getDataTestAttr } from '../utils';
 import UsersList from '../../src/components/UsersList.vue';
@@ -24,6 +25,7 @@ jest.mock('../../src/utils/api', () => {
         getUsers: jest.fn(() => Promise.resolve(mockGetUsers)),
     }
 });
+const mockedApi = api as jest.Mocked<typeof api>;
 
 afterEach(() => {
     jest.clearAllMocks();
@@ -44,9 +46,9 @@ describe('UsersList', () => {
     });
 
     test('should call getUser method right after the component loads', () => {
-        expect(api.getUsers).not.toHaveBeenCalled();
+        expect(mockedApi.getUsers).not.toHaveBeenCalled();
         shallowMount(UsersList, getMountConfig());
-        expect(api.getUsers).toHaveBeenCalled();
+        expect(mockedApi.getUsers).toHaveBeenCalled();
     });
 
     test('should not render api error paragraph if api resolves correctly', async () => {
@@ -55,7 +57,7 @@ describe('UsersList', () => {
     });
 
     test('should render api error paragraph if api fails', async () => {
-        api.getUsers.mockRejectedValueOnce({});
+        mockedApi.getUsers.mockRejectedValueOnce({});
         const wrapper = await waitMount();
         expect(wrapper.find(getDataTestAttr('api-error-message')).exists()).toBe(true);
     });
@@ -71,7 +73,7 @@ describe('UsersList', () => {
         const wrapper = await waitMount();
         const firstUser = wrapper.findComponent('user-stub');
         expect(wrapper.vm.store.users[0].liked).toBe(false);
-        firstUser.vm.$emit('like', firstUserId);
+        (firstUser as any).vm.$emit('like', firstUserId);
         expect(wrapper.vm.store.users[0].liked).toBe(true);
     });
 });
