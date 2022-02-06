@@ -2,6 +2,7 @@ import { markRaw } from 'vue';
 import { defineStore, createPinia } from 'pinia'
 import api from './utils/api';
 import router from './router';
+import { User } from './types/User';
 
 const pinia = createPinia();
 
@@ -9,8 +10,20 @@ pinia.use(({ store }) => {
     store.router = markRaw(router)
 });
 
+interface GetUsersFunc {
+    (): User[]
+}
+
+export interface IState {
+    form: User,
+    users: User[],
+    showApiError: Boolean,
+    getUsers?: GetUsersFunc,
+}
+
+
 export const useStore = defineStore('main', {
-    state: () => ({
+    state: (): IState => ({
         form: {
             name: '',
             city: '',

@@ -13,11 +13,12 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from '../store';
 
-export default {
+export default defineComponent({
     props: {
         user: {
             type: Object,
@@ -41,7 +42,7 @@ export default {
             edit,
         }
     }
-}
+});
 </script>
 
 <style scoped>

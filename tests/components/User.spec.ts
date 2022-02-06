@@ -1,6 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 import User from '../../src/components/User.vue';
 import { getMountConfig, getDataTestAttr } from '../utils';
+import { RelaxedWrapper } from '../types';
 
 const defaultProps = {
     user: {
@@ -42,7 +43,7 @@ describe('User', () => {
             ...defaultProps,
             id
         };
-        const wrapper = shallowMount(User, getMountConfig({ props }));
+        const wrapper = shallowMount(User, getMountConfig({ props })) as RelaxedWrapper;
         await wrapper.vm.store.getUsers();
 
         const likedSpan = wrapper.get(getDataTestAttr('like'));
