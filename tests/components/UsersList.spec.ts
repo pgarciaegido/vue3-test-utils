@@ -1,9 +1,9 @@
-import { VueElement } from 'vue';
-import { shallowMount, VueWrapper } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import flushPromises from 'flush-promises';
 import { getMountConfig, getDataTestAttr } from '../utils';
 import UsersList from '../../src/components/UsersList.vue';
 import api from '../../src/utils/api';
+import { RelaxedWrapper } from '../types';
 
 const mockGetUsers = [
     {
@@ -32,7 +32,7 @@ afterEach(() => {
 });
 
 const waitMount = async () => {
-    const w = shallowMount(UsersList, getMountConfig());
+    const w = shallowMount(UsersList, getMountConfig()) as RelaxedWrapper;
     await flushPromises();
     return w;
 }
@@ -72,6 +72,7 @@ describe('UsersList', () => {
         const firstUserId = 1;
         const wrapper = await waitMount();
         const firstUser = wrapper.findComponent('user-stub');
+
         expect(wrapper.vm.store.users[0].liked).toBe(false);
         (firstUser as any).vm.$emit('like', firstUserId);
         expect(wrapper.vm.store.users[0].liked).toBe(true);
